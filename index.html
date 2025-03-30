@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="left-pane">
+        <div class="container-fave">
+            <h2 id="title">Your Favorite Movies</h2>
+        </div>
+    </div>
+
+    <div id="right-pane">
+        <div class="container">
+            <h2 id="title">Enter Title</h2>
+            <input type="text" id="film-title" placeholder="Movie Title">
+                
+            <button id="submit" onclick="visualiseData()">Search</button>
+        </div>
+
+        <div class="container invisible" id="film-info">
+            <div>
+            <span id="film-info-title">AEUUEH</span>
+
+            <br>
+
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <span id="film-director">GEUIHGIE</span>
+                ,
+                <span id="film-year">GUIEUIH</span>
+            </div>
+
+            <p id="film-plot">
+
+            </p>
+
+            <p id="film-actors">
+
+            </p>
+            </div>
+
+            <img id="film-poster" src="https://flagsapi.com/BG/shiny/64.png">
+        </div>
+
+        <script src="script.js"></script>
+    </div>
+</body>
+</html>
