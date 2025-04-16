@@ -1,6 +1,7 @@
 const BASE_URL = 'http://www.omdbapi.com/?i=tt3896198&apikey=8106045&t=';
 
 let favorites = [];
+let html = [];
 
 if (localStorage.getItem('favoritesMovies') != null) {
     favorites = JSON.parse(localStorage.getItem('favoritesMovies'));
@@ -12,6 +13,8 @@ let obj;
 let counter = favorites.length;
 
 function renderFavoriteMovie(currMovie, id) {
+    console.log(currMovie);
+    
     let baseDiv = document.getElementById('fave-mvs');
 
     let div = document.createElement('div');
@@ -37,7 +40,9 @@ function renderFavoriteMovie(currMovie, id) {
 
     let btnView = document.createElement('button');
     btnView.textContent = 'View';
+    btnView.id = 'view' + id;
     btnView.style.margin = '0px';
+    btnView.addEventListener("click", showFromFavorites);
 
     div2.appendChild(filmTitle);
 
@@ -48,6 +53,8 @@ function renderFavoriteMovie(currMovie, id) {
     div.appendChild(div2);
 
     baseDiv.appendChild(div);
+
+    html.push(div);
 }
 
 function readFavoriteMovies() {
@@ -76,35 +83,52 @@ async function submitData() {
         .then((data) => obj = data);
 }
 
-async function visualiseData() {
+async function getData() {
+    await submitData();
+    visualiseData(obj);
+}
+
+async function visualiseData(movie) {
     let cityInfo = document.getElementById('film-info');
     cityInfo.classList.remove('invisible');
-    
-    await submitData();
 
-    document.getElementById('film-info-title').innerHTML = obj.Title;
-    document.getElementById('film-director').innerHTML = obj.Director;
-    document.getElementById('film-year').innerHTML = obj.Year;
+    document.getElementById('film-info-title').innerHTML = movie.Title;
+    document.getElementById('film-director').innerHTML = movie.Director;
+    document.getElementById('film-year').innerHTML = movie.Year;
 
-    document.getElementById('film-plot').innerHTML = obj.Plot;
-    document.getElementById('film-actors').innerHTML = obj.Actors;
+    document.getElementById('film-plot').innerHTML = movie.Plot;
+    document.getElementById('film-actors').innerHTML = movie.Actors;
 
-    document.getElementById('film-poster').src = obj.Poster;
+    document.getElementById('film-poster').src = movie.Poster;
 }
 
 function addToFavorites() {
+    console.log(obj);
+
     favorites.push(obj);
 
     localStorage.setItem("favoritesMovies", JSON.stringify(favorites));
 
-    renderFavoriteMovie(counter++);
+    counter++;
+
+    renderFavoriteMovie(obj, counter - 1);
 }
 
 function removeFromFavorites(e) {
-    let index = favorites[e.target.id.substring(6)];
+    let index = favorites.indexOf(favorites[e.target.id.substring(6)]);
     console.log(index);
 
     favorites.splice(index, 1);
 
+    let baseDiv = document.getElementById('fave-mvs');
+    baseDiv.removeChild(html[index]);
+
+    html.splice(index, 1);
+
     localStorage.setItem("favoritesMovies", JSON.stringify(favorites));
+}
+
+function showFromFavorites(e) {
+    let movie = favorites[e.target.id.substring(4)];
+    visualiseData(movie);
 }
